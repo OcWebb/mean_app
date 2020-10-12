@@ -10,7 +10,6 @@
     <div class="container">
       <% include nav %>
       <p></p>
-
       <% for(var i = 0; i < blogEntries.length; i++) { %>
         <div class="card border-primary m-5" style="width: 50%">
           <div class="card-header">
@@ -30,12 +29,12 @@
             <div class="col-sm">
               <ul class="nav justify-content-end nav-pills card-header-pills">
                 <li class="nav-item">
-                  <a class="nav-link" href="/blogs/edit">
+                  <a class="nav-link" href="/blogs/edit/<%= blogEntries[i]._id %>">
                     <i class="fa fa-edit"></i>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/blogs/delete">
+                  <a class="nav-link" href="/blogs/delete/<%= blogEntries[i]._id %>">
                     <i class="fa fa-trash"></i>
                   </a>
                 </li>

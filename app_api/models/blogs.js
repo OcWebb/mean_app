@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-//At a minimum, a blog entry should have a blog-title, blog-text and a created-on date.
+// At a minimum, a blog entry should have a blog-title, blog-text and a created-on date.
 
 var blogSchema = new mongoose.Schema({
     author: String,
@@ -11,3 +11,5 @@ var blogSchema = new mongoose.Schema({
         "default": Date.now
     }
 });
+
+mongoose.model('Blog', blogSchema)

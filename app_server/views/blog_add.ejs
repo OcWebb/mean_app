@@ -8,9 +8,22 @@
   <body>
     <div class="container">
       <% include nav %>
-      <p></p>
-      <h4>Add Blog</h4>
-      <p><i>Blog feature is under construction.</i></p>
+      <p></p> <!-- Spacer for content to match instructors -->
+      
+      <div class="card border-primary ng-scope" style="width: 50%">
+          <form class="p-3" name="userForm" method="POST">
+            <div class="form-group">
+              <label class="text-primary">Author</label>
+              <input class="form-control" name="author">
+              <label for="summary" class="text-primary">Blog Title</label>
+              <input class="form-control" id="title" name="blogTitle">
+              <label for="detail" class="text-primary">Blog Text</label>
+              <textarea class="form-control" id="text" rows="3" name="blogText"></textarea>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Add Blog">
+          </form>
+      </div>
+
     </div>
   </body>
   <script src="/js/jquery.min.js"></script>

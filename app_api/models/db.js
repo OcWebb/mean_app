@@ -1,9 +1,7 @@
 var mongoose = require('mongoose'); 
-var dbURI = 'mongodb://localhost/blogger';
+var dbURI = 'mongodb://blogger:blogger@localhost:27017/blogger';
 
-mongoose.connect(dbURI);    
-
-
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });    
 
 //      Shutdown procedure
 // Closes (disconnects) from Mongoose DB upon shutdown                       

@@ -1,10 +1,11 @@
+require('./app_api/models/db'); 
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
 var routes = require('./app_server/routes/index');
-require('./app_server/models/db'); 
+var routesApi = require('./app_api/routes/index');
 
 let app = express();
 
@@ -23,6 +24,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/css', express.static(__dirname + '/public/stylesheets'));
 
 app.use('/', routes);
+app.use('/api', routesApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
