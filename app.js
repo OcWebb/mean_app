@@ -1,9 +1,13 @@
-require('./app_api/models/db'); 
+require('dotenv').config();
 let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+
+var passport = require('passport');
+require('./app_api/models/db'); 
+require('./app_api/config/passport');
 var routesApi = require('./app_api/routes/index');
 
 let app = express();
@@ -17,12 +21,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_client'))); 
+app.use(express.static(path.join(__dirname, 'common')));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/js', express.static(__dirname + '/app_client/lib'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 app.use('/css', express.static(__dirname + '/public/stylesheets'));
 
+app.use(passport.initialize());
 app.use('/api', routesApi);
 
 app.use(function(req, res) {

@@ -40,4 +40,5 @@ mongoose.connection.on('connected', function () {
     console.log('Mongoose disconnected');
   });   
 
-  require('./blogs');   
+  require('./blogs');
+  require('./users');
