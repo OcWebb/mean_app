@@ -32,12 +32,12 @@ app.config(function($routeProvider) {
             controllerAs: 'vm'
             })
         .when('/login', {
-            templateUrl: 'auth/login.view.html',
+            templateUrl: 'pages/login.html',
             controller: 'LoginController',
             controllerAs: 'vm'
             })
         .when('/register', {
-            templateUrl: 'auth/register.view.html',
+            templateUrl: 'pages/register.html',
             controller: 'RegisterController',
             controllerAs: 'vm'
             })
@@ -67,15 +67,19 @@ function deleteBlog($http, authentication, id) {
 }
 
 //*** home page controller ***
-app.controller('HomeController', function HomeController() {
+app.controller('HomeController', function HomeController() { 
     var vm = this;
     vm.name = "Ryan Webster";
 });
 
 //*** Controllers ***
-app.controller('ListController', function ListController($http) {
+app.controller('ListController', ['$http', 'authentication', function ListController($http, authentication) {
     var vm = this;
     
+    vm.isLoggedIn = function() {
+      return authentication.isLoggedIn();
+    }
+
     getAllBlogs($http)
       .then(function(resp) {
         vm.blogs = resp.data;
@@ -84,9 +88,9 @@ app.controller('ListController', function ListController($http) {
       ,function (e) {
         vm.message = "Could not get list of blogs";
       };
-});
+}]);
 
-app.controller('EditController', [ '$http', '$routeParams', '$location', function EditController($http, $routeParams, $location) {
+app.controller('EditController', [ '$http', '$routeParams', '$location', 'authentication', function EditController($http, $routeParams, $location, authentication) {
     var vm = this;
     vm.blog = {};       // Start with a blank blog
     vm.id = $routeParams.id;    // Get id from $routParams which must be injected and passed into controller
@@ -108,7 +112,7 @@ app.controller('EditController', [ '$http', '$routeParams', '$location', functio
         data.blogText = userForm.blogText.value;
         data.author = userForm.author.value;
 
-        updateBlogById($http, vm.id, data)
+        updateBlogById($http, authentication, vm.id, data)
           .then(function(data) {
             vm.message = "Blog data updated!";
             $location.path("/blogs");
@@ -119,7 +123,7 @@ app.controller('EditController', [ '$http', '$routeParams', '$location', functio
     }
 }]);
 
-app.controller('AddController', [ '$http', '$location', function AddController($http, $location) {
+app.controller('AddController', [ '$http', '$location', 'authentication', function AddController($http, $location, authentication) {
     var vm = this;
     vm.blog = {};       // Start with a blank blog
     
@@ -130,7 +134,7 @@ app.controller('AddController', [ '$http', '$location', function AddController($
         data.blogText = userForm.blogText.value;
         data.author = userForm.author.value;
                
-        addBlog($http, data)
+        addBlog($http, authentication, data)
           .then(function(data) {
             vm.message = "Blog has beed added!";
             $location.path("/blogs");   // Refer to blog for info on StateProvder
@@ -141,7 +145,7 @@ app.controller('AddController', [ '$http', '$location', function AddController($
     }
 }]);
 
-app.controller('DeleteController', [ '$http', '$routeParams', '$location', function DeleteController($http, $routeParams, $location) {
+app.controller('DeleteController', [ '$http', '$routeParams', '$location', 'authentication', function DeleteController($http, $routeParams, $location, authentication) {
     var vm = this;
     vm.blog = {};       // Start with a blank blog
     vm.id = $routeParams.id;    // Get id from $routParams which must be injected and passed into controller
@@ -158,7 +162,7 @@ app.controller('DeleteController', [ '$http', '$routeParams', '$location', funct
     
     // Submit function attached to ViewModel for use in form
     vm.submit = function() {
-       deleteBlog($http, vm.id)
+       deleteBlog($http, authentication, vm.id)
           .then(function(data) {
             vm.message = "Blog deleted!";
             $location.path("/blogs");   // Refer to blog for info on StateProvder

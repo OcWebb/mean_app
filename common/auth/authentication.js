@@ -21,7 +21,6 @@ function authentication ($window, $http) {
     
     var login = function(user) {
         console.log('Attempting to login user ' + user.email + ' ' + user.password);
-        //$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
         return $http.post('/api/login', user).success(function(data) {
             saveToken(data.token);
         });
@@ -82,8 +81,8 @@ app.controller('LoginController', [ '$http', '$location', 'authentication', func
     vm.onSubmit = function () {
       vm.formError = "";
       if (!vm.credentials.email || !vm.credentials.password) {
-           vm.formError = "All fields required, please try again";
-        return false;
+          vm.formError = "All fields required, please try again";
+          return false;
       } else {
            vm.doLogin();
       }
@@ -106,7 +105,10 @@ app.controller('LoginController', [ '$http', '$location', 'authentication', func
 
 app.controller('RegisterController', [ '$http', '$location', 'authentication', function RegisterController($http, $location, authentication) {
     var vm = this;
+
     vm.test = 'testing';
+    console.log ('Page Loaded')
+
     vm.pageHeader = {
       title: 'Create a new Blooger account'
     };
@@ -120,6 +122,7 @@ app.controller('RegisterController', [ '$http', '$location', 'authentication', f
     vm.returnPage = $location.search().page || '/';
     
     vm.onSubmit = function () {
+      console.log ('In register "on submit"')
       vm.formError = "";
       if (!vm.credentials.name || !vm.credentials.email || !vm.credentials.password) {
         vm.formError = "All fields required, please try again";

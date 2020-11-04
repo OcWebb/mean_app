@@ -6,7 +6,7 @@
     <script src="/js/angular-ui-router.js"></script>
     <link rel="stylesheet" href='/stylesheets/style.css' />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' />
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' />
   </head>
   <body>
   
@@ -45,12 +45,12 @@
               <div class="col-sm">
                 <ul class="nav justify-content-end nav-pills card-header-pills">
                   <li class="nav-item">
-                    <a class="nav-link" href="#/blogs/edit/{{ blog._id }}">
+                    <a ng-show="vm.isLoggedIn()" class="nav-link" href="#/blogs/edit/{{ blog._id }}">
                       <i class="fa fa-edit"></i>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#/blogs/delete/{{ blog._id }}">
+                    <a ng-show="vm.isLoggedIn()" class="nav-link" href="#/blogs/delete/{{ blog._id }}">
                       <i class="fa fa-trash"></i>
                     </a>
                   </li>
@@ -113,13 +113,64 @@
     </div>
 </script>
 
-    <!-- Angular View (dynamic content goes here) -->  
-    <div ng-view></div>
-    
-    <script src="/bloggerApp.js"></script> 
-    <script src="/nav/navigation.js"></script>
-    <script src="/auth/authentication.js"></script>
-</body>
+<script type="text/ng-template" id="pages/register.html">
+  <div class="container">
+    <p></p>
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <p class="lead">Already a member? Please <a href="#/login?page={{ vm.returnPage }}">log in</a> instead.</p>
+        <form ng-submit="vm.onSubmit()" ng-controller="RegisterController">
+          <p>Pg Header: {{vm.pageHeader.title}}</p>
+          <div role="alert" ng-show="vm.formError" class="alert alert-danger">{{ vm.formError }}</div>
+          <div class="form-group">
+            <label for="name">Full name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" ng-model="vm.credentials.name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" ng-model="vm.credentials.email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" ng-model="vm.credentials.password">
+          </div>
+          <button type="submit" class="btn btn-primary">Register!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="pages/login.html">
+  <div class="container">
+    <p></p>
+    <div class="row">
+      <div class="col-md-6 col-sm-8">
+        <p class="lead">Not a member? Please <a href="#/register?page={{ vm.returnPage }}">register</a> first.</p>
+        <form ng-submit="vm.onSubmit()" ng-controller="LoginController">
+          <div role="alert" ng-show="vm.formError" class="alert alert-danger">{{ vm.formError }}</div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" ng-model="vm.credentials.email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" ng-model="vm.credentials.password">
+          </div>
+          <button type="submit" class="btn btn-primary">Sign in!</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</script>
+<!-- Angular View (dynamic content goes here) -->  
+<div ng-view></div>
+
+<script src="/bloggerApp.js"></script> 
+<script src="/nav/navigation.js"></script>
+<script src="/auth/authentication.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+</body>
+
 </html>                
