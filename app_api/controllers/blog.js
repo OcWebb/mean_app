@@ -1,14 +1,6 @@
 var mongoose = require('mongoose');
 var blog_model = mongoose.model('Blog');
 
-/*
-router.get('/blogs', ctrlblog.blog_list);
-router.get('/blogs/:blogid', ctrlblog.blog_single);
-router.post('/blogs', ctrlblog.blog_create);
-router.put('/blogs/:blogid', ctrlblog.blog_update);
-router.delete('/blogs/:blogid', ctrlblog.blog_delete);
-*/
-
 var sendJSONresponse = function(res, status, content) {
     res.status(status);
     res.json(content);
@@ -39,8 +31,10 @@ var buildBlogList = function(req, res, results) {
   results.forEach(function(obj) {
     blogs.push({
       author: obj.author,
+      email: obj.email,
       blogTitle: obj.blogTitle,
       blogText: obj.blogText,
+      createdOn: obj.createdOn,
       _id: obj._id
     });
   });
@@ -79,6 +73,7 @@ module.exports.blog_create = function (req, res) {
     blog_model
     .create({
             author: req.body.author,
+            email: req.body.email,
             blogTitle: req.body.blogTitle,
             blogText: req.body.blogText,
         }, 
@@ -97,10 +92,11 @@ module.exports.blog_create = function (req, res) {
 module.exports.blog_update = function (req, res) {
     console.log("Updating blog entry with id of " + req.params.blogid);
     console.log(req.body);
+
     blog_model
     .findOneAndUpdate(
-        { _id: req.params.blogid },
-        { $set: {"author": req.body.author, "blogTitle": req.body.blogTitle, "blogText": req.body.blogText}},
+        { _id: req.params.blogid, email: req.body.email },
+        { $set: {"blogTitle": req.body.blogTitle, "blogText": req.body.blogText}},
         function(err, response) {
             if (err) {
                 sendJSONresponse(res, 400, err);

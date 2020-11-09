@@ -107,10 +107,13 @@ app.controller('EditController', [ '$http', '$routeParams', '$location', 'authen
     
     // Submit function attached to ViewModel for use in form
     vm.submit = function() {
+        currentUser = authentication.currentUser();
         var data = vm.blog;
+
         data.blogTitle = userForm.blogTitle.value;
         data.blogText = userForm.blogText.value;
-        data.author = userForm.author.value;
+        data.author = currentUser.name;
+        data.email = currentUser.email;
 
         updateBlogById($http, authentication, vm.id, data)
           .then(function(data) {
@@ -126,13 +129,15 @@ app.controller('EditController', [ '$http', '$routeParams', '$location', 'authen
 app.controller('AddController', [ '$http', '$location', 'authentication', function AddController($http, $location, authentication) {
     var vm = this;
     vm.blog = {};       // Start with a blank blog
-    
+    currentUser = authentication.currentUser();
+
     // Submit function attached to ViewModel for use in form
     vm.submit = function() {
         var data = vm.blog;
         data.blogTitle = userForm.blogTitle.value;
         data.blogText = userForm.blogText.value;
-        data.author = userForm.author.value;
+        data.author = currentUser.name;
+        data.email = currentUser.email;
                
         addBlog($http, authentication, data)
           .then(function(data) {
@@ -149,7 +154,7 @@ app.controller('DeleteController', [ '$http', '$routeParams', '$location', 'auth
     var vm = this;
     vm.blog = {};       // Start with a blank blog
     vm.id = $routeParams.id;    // Get id from $routParams which must be injected and passed into controller
-    
+
     // Get blog data so it may be displayed on edit page
     getBlogById($http, vm.id)
       .then(function(resp) {
@@ -162,14 +167,21 @@ app.controller('DeleteController', [ '$http', '$routeParams', '$location', 'auth
     
     // Submit function attached to ViewModel for use in form
     vm.submit = function() {
-       deleteBlog($http, authentication, vm.id)
-          .then(function(data) {
-            vm.message = "Blog deleted!";
-            $location.path("/blogs");   // Refer to blog for info on StateProvder
-          })
-          ,function (e) {
-            vm.message = "Could not delete blog with id " + vm.id;
-          };
+      currentUser = authentication.currentUser();
+      if (vm.blog.email == currentUser.email)
+      {
+        deleteBlog($http, authentication, vm.id)
+            .then(function(data) {
+              vm.message = "Blog deleted!";
+              $location.path("/blogs");   // Refer to blog for info on StateProvder
+            })
+            ,function (e) {
+              vm.message = "Could not delete blog with id " + vm.id;
+            };
+      } else {
+        vm.message = "Not autherized";
+        $location.path("/blogs"); 
+      }
     }
 }]);
 
